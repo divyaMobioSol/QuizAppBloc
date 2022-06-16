@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quiz_app/bloc/event.dart';
 import 'package:quiz_app/bloc/state.dart';
@@ -8,6 +9,8 @@ import '../questionAnswerModel.dart';
 class QuizBloc extends Bloc<QuestionEvent, QuestionState> {
   QuizBloc() : super(QuestionLoading()) {
     final List<QuestionAnswer> _questions = [
+      //
+
       QuestionAnswer(answers: [
         {'text': 'Red', 'score': 5, 'result': true},
         {'text': 'Black', 'score': 10, 'result': false},
@@ -38,33 +41,51 @@ class QuizBloc extends Bloc<QuestionEvent, QuestionState> {
 
     on<loadQuestions>((event, emit) async {
       await Future<void>.delayed(Duration(seconds: 6));
-      emit(QuestionLoaded(score: 0, index: 0, quiz: _questions));
+      emit(QuestionLoaded(index: 0, quiz: _questions, totalScore: totalScore));
     });
 
     on<nextQuestion>((event, emit) {
       if (state is QuestionLoaded) {
         final state = this.state as QuestionLoaded;
         emit(QuestionLoaded(
-            score: (state as QuestionLoaded).score + totalScore,
             index: (state as QuestionLoaded).index + 1,
-            quiz: _questions));
+            quiz: _questions,
+            totalScore: totalScore));
       }
     });
 
-    on<addScore>((event, emit) {
+    on<AnswerQuestions>((event, emit) {
       if (state is QuestionLoaded) {
-        final state = this.state as QuestionLoaded;
-        emit(QuestionLoaded(
-            score: (state as QuestionLoaded).score + totalScore,
-            index: (state as QuestionLoaded).index + 1,
-            quiz: _questions));
+        totalScore += event.answer['score'] as int;
+
+        if (event.answer['result'] == null) {
+          ScaffoldMessenger.of(event.context).showSnackBar(const SnackBar(
+            content: Text('Answer not selected'),
+            duration: Duration(seconds: 3),
+          ));
+          return;
+        } else if (event.answer['result'] as bool) {
+          ScaffoldMessenger.of(event.context).showSnackBar(const SnackBar(
+            content: Text('Answer is correct'),
+            duration: Duration(seconds: 3),
+          ));
+          return;
+        } else if (event.answer['result'] == false) {
+          ScaffoldMessenger.of(event.context).showSnackBar(const SnackBar(
+            content: Text('Answer is wrong'),
+            duration: Duration(seconds: 3),
+          ));
+          return;
+        }
       }
     });
 
     on<resetQuestion>((event, emit) {
       if (state is QuestionLoaded) {
         final state = this.state as QuestionLoaded;
-        emit(QuestionLoaded(score: 0, index: 0, quiz: _questions));
+        totalScore = 0;
+        emit(
+            QuestionLoaded(totalScore: totalScore, index: 0, quiz: _questions));
       }
     });
   }

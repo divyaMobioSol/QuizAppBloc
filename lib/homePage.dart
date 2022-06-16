@@ -15,32 +15,33 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var _totalScore = 0;
+  //var _totalScore = 0;
   // var result = false;
 
-  _answerQuestion(int score) {
-    _totalScore = _totalScore + score;
-  }
+  // void _answerQuestion(int score) {
+  //   _totalScore = _totalScore + score;
+  // }
+
+  // _answerQuestion(bool result) {
+  //   if (result == true) {
+  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //       content: Text('Answer is correct'),
+  //       duration: Duration(seconds: 3),
+  //     ));
+  //   } else {
+  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //       content: Text('Answer is wrong'),
+  //       duration: Duration(seconds: 3),
+  //     ));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Quiz App')),
       body: BlocConsumer<QuizBloc, QuestionState>(
-        listener: (context, state) {
-          // if ((state as QuestionLoaded).quiz[state.index].answers[1]['score'] ==
-          //     5) {
-          //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          //     content: Text('Answer is correct'),
-          //     duration: Duration(seconds: 3),
-          //   ));
-          // } else {
-          //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          //     content: Text('Answer is wrong'),
-          //     duration: Duration(seconds: 3),
-          //   ));
-          //  }
-        },
+        listener: (context, state) {},
         builder: (context, state) {
           if (state is QuestionLoading) {
             return Center(child: CircularProgressIndicator());
@@ -49,12 +50,10 @@ class _HomePageState extends State<HomePage> {
                 ? Quiz(
                     questions: state.quiz,
                     questionIndex: state.index,
-                    answerQuestion: () =>
-                        context.read<QuizBloc>().add(addScore()),
                     onTap: () {
                       context.read<QuizBloc>().add(nextQuestion());
                     })
-                : Result(state.score,
+                : Result(state.totalScore,
                     () => context.read<QuizBloc>().add(resetQuestion()));
           }
           return Text('nkgn');

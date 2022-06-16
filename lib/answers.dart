@@ -18,7 +18,14 @@ class Answer extends StatelessWidget {
               onPrimary: Colors.white,
             ),
             child: Text(answerText),
-            onPressed: selectHandler,
+            onPressed:
+                //         (state as QuestionLoaded).quiz[state.index].answers.map((e) {
+                //   if (e['result'] == true) {
+                //     print(e);
+                //   }
+                //   //print(e);
+                // }).toList();
+                selectHandler,
           )),
     );
   }

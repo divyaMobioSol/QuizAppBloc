@@ -11,9 +11,13 @@ class QuestionLoading extends QuestionState {}
 class QuestionLoaded extends QuestionState {
   final List<QuestionAnswer> quiz;
   int index;
-  int score;
-  QuestionLoaded(
-      {required this.index, required this.quiz, required this.score});
+  int totalScore;
+
+  QuestionLoaded({
+    required this.index,
+    required this.quiz,
+    required this.totalScore,
+  });
 }
 
 class QuestionError extends QuestionState {}

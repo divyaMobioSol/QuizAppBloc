@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Result extends StatelessWidget {
   final int resultScore;
-  final void Function()? restartQuiz;
+  final VoidCallback restartQuiz;
 
   Result(this.resultScore, this.restartQuiz);
 
